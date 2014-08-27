@@ -11,7 +11,7 @@ The script aims to publish a set of Solr metrics (custom metrics) to AWS Cloudwa
 '''
 
 #Amazon Cloudwatch API
-#rejects values less than  or greater than
+#rejects values less than 8.515920e-108 or greater than 1.174271e+107
 #So we need normalized the values returned by solr to be within that range
 def normalize_value(val):
     float_lower_bound = 8.515920e-108
@@ -37,13 +37,12 @@ def put_metrics(connection, namespace,name, value, unit, dimensions):
         sys.exit(0)
 
 
-#connection to ec2
+#connection to cloudwatch
 cloud_watch_connection =  boto.ec2.cloudwatch.connect_to_region("us-west-2")
 
 instance_id_to_servers=dict()
 
-# it would be nice if we can get this info from zookeeper at runtime. (possibly a future improvement)
-#solrcloud people servers
+#TODO: eventually, we need to grab this values from boto's ec2 api
 instance_id_to_servers["i-24afdc2f"] = ('ec2-54-191-245-79.us-west-2.compute.amazonaws.com', '8080:SHARD0', '7070:SHARD3')
 instance_id_to_servers["i-58afdc53"] = ('ec2-54-191-245-85.us-west-2.compute.amazonaws.com', '8080:SHARD1', '7070:SHARD4')
 instance_id_to_servers["i-5fafdc54"] = ('ec2-54-191-245-149.us-west-2.compute.amazonaws.com', '8080:SHARD2', '7070:SHARD0')
@@ -93,6 +92,7 @@ for key in instance_id_to_servers:
 
     #org cores don't have replicas. don't do this for them
     is_org = True if (key == 'i-6ea1d265' or key == 'i-6da1d266') else False
+
     if not is_org:
         replica_shardname = instance_id_to_servers[key][2].split(":")[1]
         replica_shardport = instance_id_to_servers[key][2].split(":")[0]
