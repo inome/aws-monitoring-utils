@@ -10,9 +10,8 @@ import traceback
 The script aims to publish a set of Solr metrics (custom metrics) to AWS Cloudwatch.
 '''
 
-#Amazon Cloudwatch API
-#rejects values less than 8.515920e-108 or greater than 1.174271e+107
-#So we need normalized the values returned by solr to be within that range
+#Amazon Cloudwatch API rejects values less than 8.515920e-108 or greater than 1.174271e+107
+#So we need to normalize the values returned by solr, to be within that range
 def normalize_value(val):
     float_lower_bound = 8.515920e-108
     float_upper_bound = 1.174271e+107
@@ -90,7 +89,9 @@ for key in instance_id_to_servers:
     put_metrics(cloud_watch_connection, "System/Linux", "SolrCloudLeader5minRateReqsPerSecond", leader_5min_req_rate_per_second, "Count/Second", dimensions)
     put_metrics(cloud_watch_connection, "System/Linux", "SolrCloudLeaderAvgTimePerRequest", leader_avg_time_per_request, "Milliseconds", dimensions)
 
-    #org cores don't have replicas. don't do this for them
+
+    #In hte current implementation of SolrCloud infrastructure, org cores are both leaders
+    #on their respective machines, hence we need to mark this as a special case
     is_org = True if (key == 'i-6ea1d265' or key == 'i-6da1d266') else False
 
     if not is_org:
@@ -110,3 +111,9 @@ for key in instance_id_to_servers:
         put_metrics(cloud_watch_connection, "System/Linux", "SolrCloudReplica5minRateReqsPerSecond", replica_5min_req_rate_per_second, "Count/Second", dimensions)
         put_metrics(cloud_watch_connection, "System/Linux", "SolrCloudReplicaAvgTimePerRequest", replica_avg_time_per_request, "Milliseconds", dimensions)
 
+
+
+    # print(host_url + " " + leader_shardname)
+    # print("LEADER: avg_req_per_sec: " + str(leader_avg_requests_per_second) + "\t" + "avg_time_per_request: " + str(leader_avg_time_per_request) + "\t" + "5min_req_rate: " + str(leader_5min_req_rate_per_second))
+    # print("REPLICA: avg_req_per_sec: " + str(replica_avg_requests_per_second) + "\t" + "avg_time_per_request: " + str(replica_avg_time_per_request) + "\t" + "5min_req_rate: " + str(replica_5min_req_rate_per_second))
+    # print("\n")
