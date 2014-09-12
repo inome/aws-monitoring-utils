@@ -5,6 +5,7 @@ import simplejson
 import boto.ec2.cloudwatch
 import sys
 import traceback
+from awsutils.accesskeys import getAccessPropertiesFromConfigService
 
 '''
 The script aims to publish a set of Solr metrics (custom metrics) to AWS Cloudwatch.
@@ -37,7 +38,8 @@ def put_metrics(connection, namespace,name, value, unit, dimensions):
 
 
 #connection to cloudwatch
-cloud_watch_connection =  boto.ec2.cloudwatch.connect_to_region("us-west-2")
+accessProperties = getAccessPropertiesFromConfigService()
+cloud_watch_connection = boto.ec2.cloudwatch.connect_to_region(accessProperties["region"], aws_access_key_id=accessProperties["aws_access_key"], aws_secret_access_key=accessProperties["aws_secret_access_key"])
 
 instance_id_to_servers=dict()
 
