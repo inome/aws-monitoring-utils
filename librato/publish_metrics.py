@@ -1,8 +1,9 @@
 # machine requirements:
 # sudo apt-get install python-dev python-pip
-# sudo pip install requests psutil argparse boto
+# sudo pip install --upgrade requests psutil argparse boto
 
 __author__ = 'mhuff'
+import json
 import requests
 import boto.ec2
 from awsutils.accesskeys import getAccessPropertiesFromConfigService
@@ -15,10 +16,11 @@ def getInstanceId():
     try:
         data = requests.get(url)
         if data.status_code == 200:
-            instance_id = data.text
+             instance_id = data.text
     except:
+        print("ERROR")
         # Populate test instance id
-        instance_id = "i-0437650f"
+        #instance_id = "i-0437650f"
 
     return instance_id
 
@@ -28,6 +30,27 @@ def getInstanceName(ec2Connection, instance_id):
         if len(reservations[0].instances) == 1 and "Name" in reservations[0].instances[0].tags:
             return reservations[0].instances[0].tags['Name']
     return None
+
+def publishMetrics(accessProperties, source, metrics):
+    request = {
+        "source": source,
+        "counters": [],
+        "gauges": []
+    }
+    if ("data-mounts-count" in metrics):
+        request["counters"].append({"name": "data-mounts-count", "value": metrics["data-mounts-count"]})
+    if ("log-mounts-count" in metrics):
+        request["counters"].append({"name": "log-mounts-count", "value": metrics["log-mounts-count"]})
+    if ("memory-used-percent" in metrics):
+        request["gauges"].append({"name": "memory-used-percent", "value": metrics["memory-used-percent"], "source": source})
+    if ("cpu-used-percent" in metrics):
+        request["gauges"].append({"name": "cpu-used-percent", "value": metrics["cpu-used-percent"], "source": source})
+    debug(request)
+
+    url = "https://metrics-api.librato.com/v1/metrics"
+    debug(url)
+    response = requests.post(url, data=json.dumps(request), headers={'content-type': 'application/json'}, auth=(accessProperties["librato_username"], accessProperties["librato_api_key"]))
+    debug(response)
 
 accessProperties = getAccessPropertiesFromConfigService()
 debug(accessProperties)
@@ -42,27 +65,31 @@ parser.add_argument("--verify", dest="verify", action="store_true", default=Fals
 args = parser.parse_args()
 debug(args)
 
-instance_id = getInstanceId()
-print(instance_id)
-instance_name = getInstanceName(ec2Connection=conn, instance_id=instance_id)
-print(instance_name)
+instanceid = getInstanceId()
+instancename = getInstanceName(ec2Connection=conn, instance_id=instanceid)
+debug("%s - %s" % (instanceid, instancename))
 
+metrics_to_publish = {}
 data_mount_count = 0
 log_mount_count = 0
 for disk in psutil.disk_partitions(all=True):
+    debug(disk)
     if args.datamountscount and "data" in disk.mountpoint and "noatime" in disk.opts and "nodiratime" in disk.opts:
         data_mount_count += 1
-        print("Data drive = " + disk.device)
+        debug("Marking disk mount %s as data drive" % disk.mountpoint)
     if args.logmountscount and "logs" in disk.mountpoint:
         log_mount_count += 1
-        print("Log drive = " + disk.device)
+        debug("Marking disk mount %s as log drive" % disk.mountpoint)
 
-print("Total data drives = %s" % data_mount_count)
-print("Total log drives = %s" % log_mount_count)
-
+if args.datamountscount:
+    metrics_to_publish["data-mounts-count"] = data_mount_count
+if args.logmountscount:
+    metrics_to_publish["log-mounts-count"] = data_mount_count
 if args.memorypercentage:
-    print("Memory used = %s" % psutil.virtual_memory().percent)
-
+    metrics_to_publish["memory-used-percent"] = psutil.virtual_memory().percent
 if args.cpupercentused:
-    print("CPU Percent used = %s" % psutil.cpu_percent())
+    metrics_to_publish["cpu-used-percent"] = psutil.cpu_percent()
 
+debug(metrics_to_publish)
+
+publishMetrics(accessProperties, instancename, metrics_to_publish)
