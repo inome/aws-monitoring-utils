@@ -1,5 +1,5 @@
 __author__ = 'mhuff'
-DEBUG = False
+DEBUG = True
 
 def debug(message):
     if DEBUG:
