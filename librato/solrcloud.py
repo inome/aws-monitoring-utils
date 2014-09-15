@@ -11,6 +11,15 @@ from awsutils.accesskeys import getAccessPropertiesFromConfigService
 The script aims to publish a set of Solr metrics (custom metrics) to AWS Cloudwatch.
 '''
 
+'''
+URL to get cluster state: http://localhost:8080/solr/zookeeper?detail=true&path=/clusterstate.json
+- If :8080 fails for some reason, try :7070 on same box
+- find any shard that this host belongs to
+- if it is a leader, report the SolrCloudLeader5minRateReqsPerSecond, and SolrCloudLeaderAvgTimePerRequest metrics
+- if it is a replica, report the SolrCloudReplica5minRateReqsPerSecond, and SolrCloudReplicaAvgTimePerRequest metrics
+'''
+
+
 #Amazon Cloudwatch API rejects values less than 8.515920e-108 or greater than 1.174271e+107
 #So we need to normalize the values returned by solr, to be within that range
 def normalize_value(val):
