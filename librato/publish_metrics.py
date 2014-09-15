@@ -66,7 +66,9 @@ args = parser.parse_args()
 debug(args)
 
 instanceid = getInstanceId()
+#instanceid="i-0437650f"
 instancename = getInstanceName(ec2Connection=conn, instance_id=instanceid)
+#instancename="coil-2.2.33.1-2"
 debug("%s - %s" % (instanceid, instancename))
 
 metrics_to_publish = {}
@@ -88,7 +90,7 @@ if args.logmountscount:
 if args.memorypercentage:
     metrics_to_publish["memory-used-percent"] = psutil.virtual_memory().percent
 if args.cpupercentused:
-    metrics_to_publish["cpu-used-percent"] = psutil.cpu_percent()
+    metrics_to_publish["cpu-used-percent"] = psutil.cpu_percent(interval=15.0)
 
 debug(metrics_to_publish)
 
