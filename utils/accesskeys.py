@@ -1,6 +1,6 @@
 __author__ = 'mhuff'
 import requests
-from awsutils.locallogging import debug
+from utils.locallogging import debug
 
 KEYS_WE_CARE_ABOUT = ["/helix-aws/aws_access_key", "/helix-aws/aws_secret_access_key", "/helix-aws/librato_api_key",
                       "/helix-aws/librato_username", "/helix-aws/pingdom_api_key", "/helix-aws/pingdom_password",

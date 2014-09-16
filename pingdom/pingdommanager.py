@@ -4,8 +4,8 @@ import os
 import requests
 from time import gmtime, strftime
 import base64
-from awsutils.accesskeys import getAccessPropertiesFromConfigService
-from awsutils.locallogging import debug
+from utils.accesskeys import getAccessPropertiesFromConfigService
+from utils.locallogging import debug
 
 DEFAULT_LIBRATO_LENGTH = 100
 

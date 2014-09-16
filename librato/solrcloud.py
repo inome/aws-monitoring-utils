@@ -5,7 +5,7 @@ import simplejson
 import boto.ec2.cloudwatch
 import sys
 import traceback
-from awsutils.accesskeys import getAccessPropertiesFromConfigService
+from utils.accesskeys import getAccessPropertiesFromConfigService
 
 '''
 The script aims to publish a set of Solr metrics (custom metrics) to AWS Cloudwatch.
