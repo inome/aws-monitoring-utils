@@ -44,4 +44,4 @@ else:
     metrics_publisher = MetricsPublisher(instancename)
 
 # Call out to publish metrics - this will do the work of collecting metrics and publishing them
-metrics_publisher.publish_metrics(None, args.verify)
+metrics_publisher.publish_metrics(accessProperties, args.verify)

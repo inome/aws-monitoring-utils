@@ -15,10 +15,13 @@ class MetricsPublisher (object):
     METRICS_MACHINE_CPU = "cpu-used-percent"
     METRICS_MACHINE_MEMORY = "memory-used-percent"
 
+    METRICS_INODE_DATA_MOUNTS_COUNT = "data-mounts-count"
+    METRICS_INODE_LOG_MOUNTS_COUNT = "log-mounts-count"
+
     METRICS_SOLRCLOUD_LEADER_AVG_REQUEST_TIME = "solrcloud-leader-avg-request-time"
     METRICS_SOLRCLOUD_LEADER_5MIN_REQ_RATE = "solrcloud-leader-5min-request-rate"
-    METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME = "solrcloud-leader-avg-request-time"
-    METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE = "solrcloud-leader-5min-request-rate"
+    METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME = "solrcloud-replica-avg-request-time"
+    METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE = "solrcloud-replica-5min-request-rate"
 
     CPU_INTERVAL = 30.0
 
