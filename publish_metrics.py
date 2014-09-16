@@ -35,7 +35,6 @@ instancename = getInstanceName(ec2Connection=conn, instance_id=instanceid, devmo
 
 # Determine which type of node we're running on and initialize the appropriate metrics publisher
 metrics_publisher = None
-instancename = "test"
 if args.inodemetrics:
     metrics_publisher = INodeMetricsPublisher(instancename)
 elif args.solrcloudmetrics:
