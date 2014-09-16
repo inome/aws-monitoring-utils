@@ -33,6 +33,10 @@ class SOLRCloudMetricsPublisher(MetricsPublisher):
                 metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
                 metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
 
+    '''
+    Reads in from the localhost zookeeper clusterstate.json file to understand what roles this particular instance
+    is playing in the overall SOLRCloud arena. Returns a set of leader roles and replica roles for this instance.
+    '''
     def getClusterStateForHost(self, localhostname):
         cluster_state_for_host = {"leaders": [], "replicas": []}
 
