@@ -16,6 +16,6 @@ class INodeMetricsPublisher(MetricsPublisher):
                 log_mount_count += 1
                 debug("Marking disk mount %s as log drive" % disk.mountpoint)
 
-        metrics_to_publish["data-mounts-count"] = MetricsPublisher.wrap_value_type(self, data_mount_count, MetricsPublisher.COUNTER)
-        metrics_to_publish["log-mounts-count"] = MetricsPublisher.wrap_value_type(self, log_mount_count, MetricsPublisher.COUNTER)
+        metrics_to_publish["data-mounts-count"] = MetricsPublisher.wrap_value_type(self, data_mount_count, MetricsPublisher.GAUGE)
+        metrics_to_publish["log-mounts-count"] = MetricsPublisher.wrap_value_type(self, log_mount_count, MetricsPublisher.GAUGE)
         return metrics_to_publish

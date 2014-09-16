@@ -1,4 +1,3 @@
-__author__ = 'mhuff'
 DEBUG = True
 
 def debug(message):

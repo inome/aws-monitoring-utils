@@ -1,16 +1,15 @@
-__author__ = 'mhuff'
 import requests
 
 def getInstanceId():
     url = "http://169.254.169.254/latest/meta-data/instance-id"
+    instance_id = None
     try:
         data = requests.get(url)
         if data.status_code == 200:
              instance_id = data.text
     except:
-        print("ERROR")
+        print("ERROR retrieving instance details")
         # Populate test instance id
-        instance_id = "i-0437650f"
 
     return instance_id
 

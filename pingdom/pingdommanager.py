@@ -1,4 +1,3 @@
-__author__ = 'mhuff'
 import boto.ec2
 import os
 import requests

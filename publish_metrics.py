@@ -1,28 +1,35 @@
-from utils.locallogging import debug
-from utils.accesskeys import getAccessPropertiesFromConfigService
+# sudo apt-get install python-dev python-pip
+# sudo pip install --upgrade boto psutil argparse requests
+
+import boto.ec2
+import argparse
 from librato.metrics_publisher import MetricsPublisher
 from librato.inode_metrics_publisher import INodeMetricsPublisher
 from librato.solrcloud_metrics_publisher import SOLRCloudMetricsPublisher
-import boto.ec2
-import argparse
+from utils.locallogging import debug
 from utils.ec2instancedetails import getInstanceId, getInstanceName
+from utils.accesskeys import getAccessPropertiesFromConfigService
 
 # Parse all arguments, display help if required
-parser = argparse.ArgumentParser(description="inome EC2 monitoring librato publisher")
+parser = argparse.ArgumentParser(description="inome's metrics publisher for librato. Gathers all metrics from the specific metrics collector and publishes them all to librato")
 parser.add_argument("--inode-metrics", dest="inodemetrics", action="store_true", help="Computes and publishes all metrics for one of inome's 'inodes'")
 parser.add_argument("--solrcloud-metrics", dest="solrcloudmetrics", action="store_true", help="Computes and publishes all metrics for one of inome's solrcloud nodes")
-parser.add_argument("--verify", dest="verify", action="store_true", default=False, help="Prints out metrics but does not send to Librato - use prior to installing as a cron")
+parser.add_argument("--verify", dest="verify", action="store_true", help="Prints out metrics but does not send to Librato - use prior to installing as a cron to ensure proper values are being returned")
 args = parser.parse_args()
 debug(args)
 
 # Retrieve all access information from the configuration service (http://config.vs.intelius.com:8080/configuration)
 accessProperties = getAccessPropertiesFromConfigService()
 if accessProperties is None:
-    print "UNABLE TO CONTINUE - NOT ABLE TO RETRIEVE CONFIGURATION DETAILS"
+    print("UNABLE TO CONTINUE - NOT ABLE TO RETRIEVE CONFIGURATION DETAILS")
     exit(1)
 
+# connect to ec2 and pull down the instance name based on the instance id we are running from
 conn = boto.ec2.connect_to_region(accessProperties["aws_regions"], aws_access_key_id=accessProperties["aws_access_key"], aws_secret_access_key=accessProperties["aws_secret_access_key"])
 instanceid = getInstanceId()
+if instanceid is None:
+    print("UNABLE TO CONTINUE - NOT ABLE TO IDENTIFY INSTANCE RUNNING")
+    exit(1)
 instancename = getInstanceName(ec2Connection=conn, instance_id=instanceid)
 
 # Determine which type of node we're running on and initialize the appropriate metrics publisher
