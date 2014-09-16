@@ -3,3 +3,5 @@ aws-utils.*
 .idea/
 test/main/java
 target/
+*.pyc
+*.properties
