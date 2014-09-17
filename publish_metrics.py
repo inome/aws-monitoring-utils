@@ -1,4 +1,4 @@
-# sudo apt-get install python-dev python-pip
+# sudo apt-get install git python-dev python-pip
 # sudo pip install --upgrade boto psutil argparse requests
 
 import boto.ec2
