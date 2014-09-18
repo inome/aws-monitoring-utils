@@ -10,7 +10,7 @@ def getInstanceId(devmode=False):
     except:
         print("ERROR retrieving instance details")
         if devmode:
-            instance_id = ""
+            instance_id = "i-xxxxxxx"
         # Populate test instance id
 
     return instance_id

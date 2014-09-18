@@ -31,7 +31,7 @@ instanceid = getInstanceId(args.devmode)
 if instanceid is None:
     print("UNABLE TO CONTINUE - NOT ABLE TO IDENTIFY INSTANCE RUNNING")
     exit(1)
-instancename = getInstanceName(ec2Connection=conn, instance_id=instanceid, devmode=args.devmode)
+instancename = "%s-%s" % (getInstanceName(ec2Connection=conn, instance_id=instanceid, devmode=args.devmode), instanceid)
 
 # Determine which type of node we're running on and initialize the appropriate metrics publisher
 metrics_publisher = None
