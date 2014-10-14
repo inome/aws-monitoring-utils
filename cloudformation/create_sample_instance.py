@@ -32,36 +32,59 @@ connection = CloudFormationConnection(aws_access_key_id="AKIAJODA7YBLIAWDFJJA",
                                       aws_secret_access_key="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",
                                       region=region)
 #delete teh stack
-connection.delete_stack("cf-test-stack")
+# connection.delete_stack("cf-test-stack")
 
 #create a simple stack  using the following attributes
 stack_name="cf-test-stack"
 template_body="""{
-  "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "A sample cloudformation stack with a single ec2 instance",
-  "Resources" : {
-    "Ec2Instance" : {
-      	"Type" : "AWS::EC2::Instance",
-		"Properties" : {
-			"BlockDeviceMappings" : [
-				{
-			      "DeviceName" : "/dev/sdb",
-			      "Ebs" : { "VolumeSize" : "75", "VolumeType" : "gp2" }
-			   	},
-			   	{
-			      "DeviceName" : "/dev/sdc",
-			      "Ebs" : { "VolumeSize" : "75", "VolumeType" : "gp2" }
-			   	}
-			],
-			"ImageId" : "ami-79196349",
-			"SubnetId" : "subnet-4b83612e",
-			"KeyName" : "inome_helix_production_cluster",
-			"InstanceType": "r3.large",
-			"PlacementGroupName" : "production-cluster",
-			"SecurityGroupIds": ["sg-eeca1a8b"]
-		}
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "A sample cloudformation stack with a single ec2 instance",
+    "Resources": {
+        "Ec2Instance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sdb",
+                        "Ebs": {
+                            "VolumeSize": "75",
+                            "VolumeType": "gp2"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sdc",
+                        "Ebs": {
+                            "VolumeSize": "75",
+                            "VolumeType": "gp2"
+                        }
+                    }
+                ],
+                "ImageId": "ami-79196349",
+                "SubnetId": "subnet-4b83612e",
+                "KeyName": "inome_helix_production_cluster",
+                "InstanceType": "r3.large",
+                "PlacementGroupName": "production-cluster",
+                "SecurityGroupIds": [
+                    "sg-eeca1a8b"
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -ex",
+                                "\\n",
+                                "sudo mkdir /mnt/shards; sudo mkfs -t ext4 /dev/xvdb ; sudo mount /dev/xvdb /mnt/shards; sudo chown -R ubuntu:ubuntu /mnt/shards; df -hT",
+                                "\\n",
+                                "sudo mkdir -p /mnt1/replicas; sudo mkfs -t ext4 /dev/xvdc ; sudo mount /dev/xvdc /mnt1/replicas; sudo chown -R ubuntu:ubuntu /mnt1/replicas; df -hT",
+                                "\\n"
+                            ]
+                        ]
+                    }
+                }
+            }
+        }
     }
-  }
 }
 """
 tag={"Name":"cf-test-stack-instance"}
