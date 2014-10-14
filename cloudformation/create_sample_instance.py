@@ -38,6 +38,12 @@ connection.delete_stack("cf-test-stack")
 stack_name="cf-test-stack"
 
 #shards to download from s3
+#TODO: Add wait handlers to long running scripts
+#TODO: chmod the permissions to ubuntu:ubuntu . For some reason, all the scripts run under UserData as root.
+#TODO: Add the part that creates core.properties, sets up solr cores, etc.
+#TODO: Add the part that uploads/links config files to zookeeper
+#TODO: Add the part where we setup monitoring on the box
+
 leader_shard_s3="s3://inome-helix/helix-3.4-20140908/solr-cores/locations/zipped/SHARD0.tar.gz"
 replica_shard_s3="s3://inome-helix/helix-3.4-20140908/solr-cores/locations/zipped/SHARD3.tar.gz"
 zk_quorum="ip-172-31-40-92.us-west-2.compute.internal,ip-172-31-40-91.us-west-2.compute.internal,ip-172-31-40-93.us-west-2.compute.internal"
