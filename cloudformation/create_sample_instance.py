@@ -32,10 +32,16 @@ connection = CloudFormationConnection(aws_access_key_id="AKIAJODA7YBLIAWDFJJA",
                                       aws_secret_access_key="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",
                                       region=region)
 #delete teh stack
-# connection.delete_stack("cf-test-stack")
+connection.delete_stack("cf-test-stack")
 
 #create a simple stack  using the following attributes
 stack_name="cf-test-stack"
+
+#shards to download from s3
+leader_shard_s3="s3://inome-helix/helix-3.4-20140908/solr-cores/locations/zipped/SHARD0.tar.gz"
+replica_shard_s3="s3://inome-helix/helix-3.4-20140908/solr-cores/locations/zipped/SHARD3.tar.gz"
+zk_quorum="ip-172-31-40-92.us-west-2.compute.internal,ip-172-31-40-91.us-west-2.compute.internal,ip-172-31-40-93.us-west-2.compute.internal"
+
 template_body="""{
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "A sample cloudformation stack with a single ec2 instance",
@@ -74,9 +80,20 @@ template_body="""{
                             [
                                 "#!/bin/bash -ex",
                                 "\\n",
+
                                 "sudo mkdir /mnt/shards; sudo mkfs -t ext4 /dev/xvdb ; sudo mount /dev/xvdb /mnt/shards; sudo chown -R ubuntu:ubuntu /mnt/shards; df -hT",
                                 "\\n",
                                 "sudo mkdir -p /mnt1/replicas; sudo mkfs -t ext4 /dev/xvdc ; sudo mount /dev/xvdc /mnt1/replicas; sudo chown -R ubuntu:ubuntu /mnt1/replicas; df -hT",
+                                "\\n",
+
+                                "/opt/s3cmd/s3cmd --config /opt/s3cfg get s3://inome-solrcloud/scripts/setup_tomcat.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts",
+                                "\\n",
+                                "bash -x setup_tomcat.sh """ + zk_quorum + """",
+                                "\\n",
+
+                                "/opt/s3cmd/s3cmd --config /opt/s3cfg get s3://inome-solrcloud/scripts/download_solr_cores.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts",
+                                "\\n",
+                                "bash -x download_solr_cores.sh """ + leader_shard_s3 + """ """ + replica_shard_s3 + """ SHARD0 SHARD3",
                                 "\\n"
                             ]
                         ]
