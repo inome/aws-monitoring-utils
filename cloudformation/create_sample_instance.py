@@ -428,7 +428,7 @@ template_body="""{
 
                                 "/opt/s3cmd/s3cmd --config /opt/s3cfg get s3://inome-solrcloud/scripts/download_solr_cores.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts",
                                 "\\n",
-                                "bash -x download_solr_cores.sh """ + instance6_leader_s3 + " " + instance6_replica_s3 + """ SHARD4 SHARD1",
+                                "bash -x download_solr_cores.sh """ + instance6_leader_s3 + " " + instance6_replica_s3 + """ SHARD5 SHARD2",
                                 "\\n",
 
                                 "/opt/s3cmd/s3cmd --config /opt/s3cfg get --force s3://inome-solrcloud/scripts/setup_solr.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts",
