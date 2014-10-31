@@ -9,10 +9,12 @@ import avro.protocol as protocol
 from utils.accesskeys import getAccessPropertiesFromConfigService, get_key_from_configservice
 from utils.locallogging import debug
 
-if not os.path.isfile("protocols/Splice.avpr"):
+splice_path = os.path.join(os.path.dirname(__file__), 'protocols/Splice.avpr')
+
+if not os.path.isfile(splice_path):
     exit(1)
 
-PROTOCOL = protocol.parse(open("protocols/Splice.avpr").read())
+PROTOCOL = protocol.parse(open(splice_path).read())
 
 if __name__ == '__main__':
     db_host = get_key_from_configservice(key="/helix-aws/spliceui_dbhost")
