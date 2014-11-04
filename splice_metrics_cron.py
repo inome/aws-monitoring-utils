@@ -76,7 +76,18 @@ if __name__ == '__main__':
             for customerlistid, customerlist in customer["lists"].iteritems():
                 params['customerListId'] = "%s" % customerlist["listname"]
                 try:
-                    listdetails = requester.request('getListInfo', params)
+                    debug(requester)
+
+                    listdetails = None
+                    try:
+                        listdetails = requester.request('getListInfo', params)
+                    except AttributeError as e:
+                        print("Unable to retrieve list with params %s" % str(params))
+                        continue
+                    except UnicodeDecodeError as e:
+                        print("Bad response received from the server for params %s" % str(params))
+                        continue
+
                     new_lists_table += "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (customer["id"], customer["name"], customer["email"], customerlist["listid"], customerlist["listname"], customerlist["listdatecreated"], listdetails["numRecords"])
                     new_lists_table_html += "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % \
                                        (customer["id"], customer["name"], customer["email"], customerlist["listid"], customerlist["listname"], customerlist["listdatecreated"], listdetails["numRecords"])
@@ -90,6 +101,10 @@ if __name__ == '__main__':
     new_lists_table_html += "</table>"
 
     client.close()
+
+    
+
+    shares_html = "<pre>"
 
     # construct mandrill request
     mandrill_api_key = get_key_from_configservice(key="/helix-aws/splice_mandrill_key")

@@ -397,7 +397,7 @@
   }, {
     "type" : "enum",
     "name" : "EmailType",
-    "symbols" : [ "RegistrationConfirmation", "PasswordReset", "PasswordResetConfirmation", "Contact" ]
+    "symbols" : [ "RegistrationConfirmation", "PasswordReset", "PasswordResetConfirmation", "Feedback", "Contact" ]
   }, {
     "type" : "enum",
     "name" : "EmailStatus",
@@ -1050,11 +1050,17 @@
     "name" : "Filter",
     "fields" : [ {
       "name" : "gender",
-      "type" : [ "null", "GenderType" ],
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "GenderType"
+      } ],
       "default" : null
     }, {
       "name" : "maritalStatus",
-      "type" : [ "null", "MaritalStatusType" ],
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "MaritalStatusType"
+      } ],
       "default" : null
     }, {
       "name" : "age",
@@ -1126,6 +1132,10 @@
     "fields" : [ {
       "name" : "success",
       "type" : "boolean"
+    }, {
+      "name" : "errorMessage",
+      "type" : [ "null", "string" ],
+      "default" : null
     }, {
       "name" : "listDetail",
       "type" : "ListDetail"
