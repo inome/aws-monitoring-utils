@@ -102,9 +102,17 @@ if __name__ == '__main__':
 
     client.close()
 
-    
-
-    shares_html = "<pre>"
+    sharedcount_url = get_key_from_configservice(key="/helix-aws/splice_sharedcount_url")
+    sharedcount_resp = ""
+    sharedcount_table_html = "<table>"
+    try:
+       sharedcount_resp = requests.get(sharedcount_url).json()
+       sharedcount_table_html += "<tr><td>FB (comments)</td><td>%s</td></tr><tr><td>FB (click)</td><td>%s</td></tr><tr><td>FB (comment)</td><td>%s</td></tr><tr><td>FB (like)</td><td>%s</td></tr><tr><td>FB (share)</td><td>%s</td></tr><tr><td>FB (total)</td><td>%s</td></tr><tr><td>Google Plus</td><td>%s</td></tr><tr><td>Twitter</td><td>%s</td></tr><tr><td>Pinterest</td><td>%s</td></tr><tr><td>LinkedIn</td><td>%s</td></tr>" % (sharedcount_resp["Facebook"]["commentsbox_count"], sharedcount_resp["Facebook"]["click_count"], sharedcount_resp["Facebook"]["comment_count"], sharedcount_resp["Facebook"]["like_count"], sharedcount_resp["Facebook"]["share_count"], sharedcount_resp["Facebook"]["total_count"], sharedcount_resp["GooglePlusOne"], sharedcount_resp["Twitter"], sharedcount_resp["Pinterest"], sharedcount_resp["LinkedIn"])
+       sharedcount_table_html += "</table>"
+       debug(sharedcount_resp)
+       debug(sharedcount_table_html)
+    except requests.exceptions.RequestException as e:
+       print("Error requesting sharedcount details: %s" %e)
 
     # construct mandrill request
     mandrill_api_key = get_key_from_configservice(key="/helix-aws/splice_mandrill_key")
@@ -117,8 +125,8 @@ if __name__ == '__main__':
     request = dict()
     request["key"] = mandrill_api_key
     request["message"] = {}
-    request["message"]["text"] = "%s\n\n\n%s" % (new_customers_table, new_lists_table)
-    request["message"]["html"] = "%s<br /><br />%s" % (new_customers_table_html, new_lists_table_html)
+    request["message"]["text"] = "%s\n\n\n%s\n\n\n%s" % (new_customers_table, new_lists_table, str(sharedcount_resp))
+    request["message"]["html"] = "%s<br /><br />%s<br /><br />%s" % (new_customers_table_html, new_lists_table_html, sharedcount_table_html)
     request["message"]["subject"] = "insights - 24 hrs of activity"
     request["message"]["from_email"] = "noreply-insights-cron@noreply.com"
     request["message"]["from_name"] = "noreply-insights-cron"
