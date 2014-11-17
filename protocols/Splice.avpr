@@ -1,0 +1,1621 @@
+{
+  "protocol" : "Splice",
+  "namespace" : "com.inome.splice",
+  "types" : [ {
+    "type" : "record",
+    "name" : "DependencyDetail",
+    "namespace" : "com.inome.servicecore",
+    "doc" : "Details about status of a dependency for a given service. This will allow for checking\n   whether all service dependencies are met, up, and running in order for the current\n   service to operate properly.",
+    "fields" : [ {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "doc" : "A short name of the service who's status is being reported",
+      "default" : null
+    }, {
+      "name" : "status",
+      "type" : [ "null", "string" ],
+      "doc" : "A string representing the operational status for this service",
+      "default" : null
+    }, {
+      "name" : "version",
+      "type" : [ "null", "string" ],
+      "doc" : "The last tagged version in GIT. This allows for ensuring that\n      the correct version of the service is running",
+      "default" : null
+    }, {
+      "name" : "timestamp",
+      "type" : [ "null", "string" ],
+      "doc" : "A timestamp showing the time at which this particular dependency\n      was compiled.",
+      "default" : null
+    }, {
+      "name" : "details",
+      "type" : [ "null", {
+        "type" : "map",
+        "values" : "string"
+      } ],
+      "doc" : "Other details that may be pertinent to describing the state of this\n      service. Represented as an map of properties that developers can include\n      anything that they wish or nothing at all.",
+      "default" : null
+    }, {
+      "name" : "dependencies",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "DependencyDetail"
+      } ],
+      "doc" : "Any sub-dependencies that this dependency may have. This will\n      most often be the result of making a request to the PING method\n      of the above dependency and including all of its dependencies in\n      this array.",
+      "default" : null
+    } ],
+    "aliases" : [ "com.inome.service.iwscore.DependencyDetail" ]
+  }, {
+    "type" : "record",
+    "name" : "ResponseDetail",
+    "namespace" : "com.inome.servicecore",
+    "doc" : "Details about the outcome of the request. If there was an error this includes\n   appropriate error details. The may be no response details if the reponse code is\n   strictly a Success, code 1000.",
+    "fields" : [ {
+      "name" : "subCode",
+      "type" : [ "int", "null" ],
+      "doc" : "A secondary response code with greater precision. For example, specific input\n     validation failures for a particular web service operation. These codes are web\n     service operation specific.",
+      "default" : 0
+    }, {
+      "name" : "requestId",
+      "type" : [ "string", "null" ],
+      "doc" : "A unique identifier for a particular request, useful for trouble-shooting",
+      "default" : ""
+    }, {
+      "name" : "message",
+      "type" : [ "string", "null" ],
+      "doc" : "A short message describing the response status code (see the strings listing\n     with the response codes).",
+      "default" : ""
+    }, {
+      "name" : "detail",
+      "type" : [ "string", "null" ],
+      "doc" : "A detailed description of the response status. The details may vary from\n     operation to operation and response to response.",
+      "default" : ""
+    } ],
+    "aliases" : [ "com.inome.service.iwscore.ResponseDetail" ]
+  }, {
+    "type" : "record",
+    "name" : "CacheStats",
+    "namespace" : "com.inome.servicecore",
+    "fields" : [ {
+      "name" : "avgLoadPenalty",
+      "type" : [ "null", "double" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "evictionCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "hitCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "hitRate",
+      "type" : [ "null", "double" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "loadCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "loadExceptionCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "loadExceptionRate",
+      "type" : [ "null", "double" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "loadSuccessCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "missCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "missRate",
+      "type" : [ "null", "double" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "requestCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "totalLoadTime",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "HttpPoolStats",
+    "namespace" : "com.inome.servicecore",
+    "fields" : [ {
+      "name" : "numActive",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "blockWhenExhausted",
+      "type" : [ "null", "boolean" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "borrowedCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "createdCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "destroyedByBorrowValidationCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "destroyedByEvictorCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "destroyedCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "evictionPolicyClassName",
+      "type" : [ "null", "string" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "lifo",
+      "type" : [ "null", "boolean" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "maxBorrowWaitTimeMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "maxIdlePerKey",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "maxTotal",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "maxTotalPerKey",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "maxWaitMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "meanActiveTimeMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "meanBorrowWaitTimeMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "meanIdleTimeMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "minEvictableIdleTimeMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "minIdlePerKey",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "numIdle",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "numTestsPerEvictionRun",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "numWaiters",
+      "type" : [ "null", "int" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "returnedCount",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "softMinEvictableIdleTimesMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "testOnBorrow",
+      "type" : [ "null", "boolean" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "testOnReturn",
+      "type" : [ "null", "boolean" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "testWhileIdle",
+      "type" : [ "null", "boolean" ],
+      "doc" : "",
+      "default" : null
+    }, {
+      "name" : "timeBetweenEvictionRunMillis",
+      "type" : [ "null", "long" ],
+      "doc" : "",
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "StatsResponse",
+    "namespace" : "com.inome.servicecore",
+    "fields" : [ {
+      "name" : "cacheStats",
+      "type" : [ "null", "CacheStats" ],
+      "default" : null
+    }, {
+      "name" : "httpPoolStats",
+      "type" : [ "null", "HttpPoolStats" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "StackCheckResponse",
+    "namespace" : "com.inome.servicecore",
+    "doc" : "Response from ping request.",
+    "fields" : [ {
+      "name" : "serviceStatus",
+      "type" : [ "null", "string" ],
+      "doc" : "A status string that will indicate either success / failure as to whether\n       the service is currently up and running fully.",
+      "default" : null
+    }, {
+      "name" : "responseCode",
+      "type" : [ "int", "null" ],
+      "doc" : "The status code indicating success, failure and other response statuses. A list of valid \n      codes will be provided with each operation. Success and common error conditions will use \n      the same code and message between endpoints and operations. If there was an error the \n      ResponseDetails will include the appropriate error details. See Response Codes for\n      response code values.",
+      "default" : 0
+    }, {
+      "name" : "responseDetail",
+      "type" : [ "null", "ResponseDetail" ],
+      "doc" : "Details about the outcome of the request. If there was an error this includes appropriate \n      error details. The may be no response details if the reponse code is strictly a Success, \n      code 1000.",
+      "default" : null
+    }, {
+      "name" : "dependencies",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "DependencyDetail"
+      } ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "PingResponse",
+    "namespace" : "com.inome.servicecore",
+    "fields" : [ {
+      "name" : "serviceStatus",
+      "type" : [ "null", "string" ],
+      "doc" : "A status string to indicate that this service is responsive",
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "ClearCacheResponse",
+    "namespace" : "com.inome.servicecore",
+    "fields" : [ {
+      "name" : "responseCode",
+      "type" : [ "int", "null" ],
+      "default" : 0
+    }, {
+      "name" : "responseDetail",
+      "type" : [ "null", "ResponseDetail" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "enum",
+    "name" : "GenderType",
+    "symbols" : [ "Male", "Female", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "MaritalStatusType",
+    "symbols" : [ "Married", "Single", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "AgeType",
+    "symbols" : [ "_18to24", "_25to34", "_35to44", "_45to54", "_55to64", "_65plus", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "DemographicSegmentType",
+    "symbols" : [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "DemographicSubSegmentType",
+    "symbols" : [ "A01", "A02", "A03", "A04", "A05", "A06", "B07", "B08", "B09", "B10", "C11", "C12", "C13", "C14", "D15", "D16", "D17", "D18", "E19", "E20", "E21", "F22", "F23", "G24", "G25", "H26", "H27", "H28", "H29", "I30", "I31", "I32", "I33", "J34", "J35", "J36", "K37", "K38", "K39", "K40", "L41", "L42", "L43", "M44", "M45", "N46", "N47", "N48", "N49", "O50", "O51", "O52", "O53", "O54", "O55", "P56", "P57", "P58", "P59", "P60", "P61", "Q62", "Q63", "Q64", "Q65", "R66", "R67", "S68", "S69", "S70", "S71", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "GlobalDemographicSegmentType",
+    "symbols" : [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "IncomeRangeType",
+    "doc" : "Enumeration describing ranges of incomes. For example, _100K_TO_199K.",
+    "symbols" : [ "_0_TO_49K", "_50K_TO_99K", "_100K_TO_199K", "_200K_AND_ABOVE", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "HomeValueRangeType",
+    "doc" : "Enumeration describing ranges of values for a home. For example, _100K_TO_249K.",
+    "symbols" : [ "_0_TO_99K", "_100K_TO_249K", "_250K_TO_499K", "_500K_TO_999K", "_1M_AND_ABOVE", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "HomeTypeType",
+    "doc" : "Enumeration describing types of homes. For example, SingleFamily.",
+    "symbols" : [ "SingleFamily", "MultiFamily", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "NumberRangeType",
+    "doc" : "Enumeration describing a range of people in a household. For example, _3_TO_5.",
+    "symbols" : [ "_0", "_1_TO_2", "_3_TO_5", "_6_AND_ABOVE", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "ChildrenInHouseholdType",
+    "doc" : "Enumeration describing presence of children in the household.",
+    "symbols" : [ "Children", "NoChildren", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
+    "name" : "EmailType",
+    "symbols" : [ "RegistrationConfirmation", "PasswordReset", "PasswordResetConfirmation", "Feedback", "Contact", "EmailChangeNotification", "EmailChangeConfirmation" ]
+  }, {
+    "type" : "enum",
+    "name" : "EmailStatus",
+    "symbols" : [ "Sent", "Queued", "Error" ]
+  }, {
+    "type" : "record",
+    "name" : "SpliceData",
+    "fields" : [ {
+      "name" : "id",
+      "type" : [ "null", "long" ],
+      "default" : null
+    }, {
+      "name" : "listid",
+      "type" : [ "null", "long" ],
+      "default" : null
+    }, {
+      "name" : "status",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "vlynxid",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerid",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "firstname1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "middlename1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "lastname1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "fullname1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "firstname2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "middlename2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "lastname2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "fullname2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "address1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "city1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "state1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "zip1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "address2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "city2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "state2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "zip2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "address3",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "city3",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "state3",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "zip3",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "email",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "homephone",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "mobilephone",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata3",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata4",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata5",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata6",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata7",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata8",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerdata9",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "gender",
+      "type" : [ "GenderType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "age",
+      "type" : [ "AgeType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "globalDemographicSegment",
+      "type" : [ "GlobalDemographicSegmentType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "demographicSegment",
+      "type" : [ "DemographicSegmentType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "demographicSubSegment",
+      "type" : [ "DemographicSubSegmentType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "maritalStatus",
+      "type" : [ "MaritalStatusType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "householdIncome",
+      "type" : [ "IncomeRangeType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "homeValue",
+      "type" : [ "HomeValueRangeType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "homeType",
+      "type" : [ "HomeTypeType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "childrenInHousehold",
+      "type" : [ "ChildrenInHouseholdType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "numberAdultsInHousehold",
+      "type" : [ "NumberRangeType", "null" ],
+      "default" : "Unknown"
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "DemographicSegmentStats",
+    "fields" : [ {
+      "name" : "demographicSegment",
+      "type" : "DemographicSegmentType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "DemographicSubSegmentStats",
+    "fields" : [ {
+      "name" : "demographicSubSegment",
+      "type" : "DemographicSubSegmentType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "GlobalDemographicSegmentStats",
+    "fields" : [ {
+      "name" : "globalDemographicSegment",
+      "type" : "GlobalDemographicSegmentType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "MaritalStatusStats",
+    "fields" : [ {
+      "name" : "maritalStatus",
+      "type" : "MaritalStatusType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "HouseholdIncomeStats",
+    "fields" : [ {
+      "name" : "income",
+      "type" : "IncomeRangeType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "HomeValueStats",
+    "fields" : [ {
+      "name" : "homeValue",
+      "type" : "HomeValueRangeType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "HomeTypeStats",
+    "fields" : [ {
+      "name" : "homeType",
+      "type" : "HomeTypeType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "ChildrenInHouseholdStats",
+    "fields" : [ {
+      "name" : "childrenInHousehold",
+      "type" : "ChildrenInHouseholdType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "NumberAdultsInHouseholdStats",
+    "fields" : [ {
+      "name" : "numberAdultsInHousehold",
+      "type" : "NumberRangeType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "SpliceCounts",
+    "fields" : [ {
+      "name" : "CountTotal",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "CountMale",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "Count18to24",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent18to24",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "Count25to34",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent25to34",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "Count35to44",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent35to44",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "Count45to54",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent45to54",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "Count55to64",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent55to64",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "Count65plus",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent65plus",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountMale18to24",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale18to24",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountMale25to34",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale25to34",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountMale35to44",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale35to44",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountMale45to54",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale45to54",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountMale55to64",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale55to64",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountMale65plus",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentMale65plus",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale18to24",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale18to24",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale25to34",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale25to34",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale35to44",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale35to44",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale45to54",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale45to54",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale55to64",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale55to64",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "CountFemale65plus",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "PercentFemale65plus",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "demographicSegmentStats",
+      "type" : {
+        "type" : "array",
+        "items" : "DemographicSegmentStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "demographicSubSegmentStats",
+      "type" : {
+        "type" : "array",
+        "items" : "DemographicSubSegmentStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "globalDemographicSegmentStats",
+      "type" : {
+        "type" : "array",
+        "items" : "GlobalDemographicSegmentStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "maritalStatusStats",
+      "type" : {
+        "type" : "array",
+        "items" : "MaritalStatusStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "maritalStatusMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "householdIncomeStats",
+      "type" : {
+        "type" : "array",
+        "items" : "HouseholdIncomeStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "householdIncomeMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "homeValueStats",
+      "type" : {
+        "type" : "array",
+        "items" : "HomeValueStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "homeValueMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "homeTypeStats",
+      "type" : {
+        "type" : "array",
+        "items" : "HomeTypeStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "homeTypeMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "childrenInHouseholdStats",
+      "type" : {
+        "type" : "array",
+        "items" : "ChildrenInHouseholdStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "childrenInHouseholdMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "numberAdultsInHouseholdStats",
+      "type" : {
+        "type" : "array",
+        "items" : "NumberAdultsInHouseholdStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "numberAdultsInHouseholdMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "ageGenderMatchRate",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "SpliceStats",
+    "fields" : [ {
+      "name" : "customerCounts",
+      "type" : [ "null", "SpliceCounts" ],
+      "default" : null
+    }, {
+      "name" : "baselineCounts",
+      "type" : [ "null", "SpliceCounts" ],
+      "default" : null
+    }, {
+      "name" : "listTotalRecords",
+      "type" : "int",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "ListDetail",
+    "fields" : [ {
+      "name" : "customerId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerListId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "created",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "numRecords",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "status",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "importErrors",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "recordsProcessed",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "estimatedCompletion",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "lastUpdate",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "Filter",
+    "fields" : [ {
+      "name" : "gender",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "GenderType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "maritalStatus",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "MaritalStatusType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "age",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "AgeType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "demographicSegment",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "DemographicSegmentType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "demographicSubSegment",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "DemographicSubSegmentType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "globalDemographicSegment",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "GlobalDemographicSegmentType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "householdIncome",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "IncomeRangeType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "homeValue",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "HomeValueRangeType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "homeType",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "HomeTypeType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "childrenInHousehold",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "ChildrenInHouseholdType"
+      } ],
+      "default" : null
+    }, {
+      "name" : "numberAdultsInHousehold",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "NumberRangeType"
+      } ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "UploadResponse",
+    "fields" : [ {
+      "name" : "success",
+      "type" : "boolean"
+    }, {
+      "name" : "errorMessage",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "listDetail",
+      "type" : "ListDetail"
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "UploadError",
+    "fields" : [ {
+      "name" : "errorMessage",
+      "type" : "string"
+    }, {
+      "name" : "badData",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "UploadErrorsResponse",
+    "fields" : [ {
+      "name" : "customerId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "customerListId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "listName",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "errors",
+      "type" : {
+        "type" : "array",
+        "items" : "UploadError"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "errorSummary",
+      "type" : {
+        "type" : "map",
+        "values" : "int"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "errorCount",
+      "type" : "int",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "EmailResponse",
+    "fields" : [ {
+      "name" : "status",
+      "type" : "EmailStatus",
+      "default" : "Sent"
+    }, {
+      "name" : "id",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "details",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "enum",
+    "name" : "ExternalMailer",
+    "symbols" : [ "MAILCHIMP" ]
+  }, {
+    "type" : "enum",
+    "name" : "SegmentType",
+    "symbols" : [ "STATIC", "DYNAMIC" ]
+  }, {
+    "type" : "record",
+    "name" : "ListHeader",
+    "fields" : [ {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "fieldType",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "tag",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "spliceEquivalent",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "SegmentInfo",
+    "fields" : [ {
+      "name" : "id",
+      "type" : [ "null", "int" ],
+      "default" : null
+    }, {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "segmentType",
+      "type" : [ "null", "SegmentType" ],
+      "default" : null
+    }, {
+      "name" : "createdDate",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "lastUpdated",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "ListInfo",
+    "fields" : [ {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "id",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "memberCount",
+      "type" : [ "null", "int" ],
+      "default" : null
+    }, {
+      "name" : "createdDate",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  } ],
+  "messages" : {
+    "ping" : {
+      "doc" : "Indicates whether this service is available to respond to requests.",
+      "request" : [ ],
+      "response" : "com.inome.servicecore.PingResponse"
+    },
+    "stackCheck" : {
+      "doc" : "Indicates whether this service is operational. This will also check all\n    dependencies for the service and include their detail as well.",
+      "request" : [ {
+        "name" : "outputDetail",
+        "type" : "boolean",
+        "doc" : "Boolean whether or not to output the complete stack check",
+        "default" : false
+      } ],
+      "response" : "com.inome.servicecore.StackCheckResponse"
+    },
+    "statsCheck" : {
+      "doc" : "Get Cache & HTTP Pool Stats",
+      "request" : [ ],
+      "response" : "com.inome.servicecore.StatsResponse"
+    },
+    "clearCache" : {
+      "doc" : "Clear local and remote config caches",
+      "request" : [ ],
+      "response" : "com.inome.servicecore.ClearCacheResponse"
+    },
+    "getList" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      }, {
+        "name" : "filter",
+        "type" : [ "null", "Filter" ],
+        "default" : null
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "SpliceData"
+      }
+    },
+    "getStats" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      }, {
+        "name" : "compareListId",
+        "type" : [ "null", "string" ],
+        "default" : null
+      }, {
+        "name" : "filter",
+        "type" : [ "null", "Filter" ],
+        "default" : null
+      } ],
+      "response" : "SpliceStats"
+    },
+    "upload" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "listId",
+        "type" : "string"
+      }, {
+        "name" : "rawFileContents",
+        "type" : "string"
+      }, {
+        "name" : "runRecordProcessor",
+        "type" : "boolean"
+      } ],
+      "response" : "UploadResponse"
+    },
+    "getAllListInfo" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "ListDetail"
+      }
+    },
+    "getListInfo" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      } ],
+      "response" : "ListDetail"
+    },
+    "deleteList" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      } ],
+      "response" : "boolean"
+    },
+    "getCustomerLocations" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      }, {
+        "name" : "filter",
+        "type" : [ "null", "Filter" ],
+        "default" : null
+      } ],
+      "response" : {
+        "type" : "map",
+        "values" : "long"
+      }
+    },
+    "getExternalLists" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "ListInfo"
+      }
+    },
+    "getExternalListHeaders" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "ListHeader"
+      }
+    },
+    "saveExternalListHeaderMap" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      }, {
+        "name" : "listHeaders",
+        "type" : {
+          "type" : "array",
+          "items" : "ListHeader"
+        }
+      } ],
+      "response" : "boolean"
+    },
+    "deleteExternalListHeaderMap" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      } ],
+      "response" : "boolean"
+    },
+    "getExternalListHeaderMap" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "ListHeader"
+      }
+    },
+    "getExternalSegments" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "listId",
+        "type" : "string"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "SegmentInfo"
+      }
+    },
+    "importExternalList" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "localListId",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      }, {
+        "name" : "runRecordProcessor",
+        "type" : "boolean"
+      } ],
+      "response" : "UploadResponse"
+    },
+    "newExternalSegment" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      }, {
+        "name" : "externalSegmentName",
+        "type" : "string"
+      }, {
+        "name" : "filter",
+        "type" : "Filter"
+      } ],
+      "response" : "boolean"
+    },
+    "updateExternalSegment" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      }, {
+        "name" : "apiKey",
+        "type" : "string"
+      }, {
+        "name" : "externalListId",
+        "type" : "string"
+      }, {
+        "name" : "externalSegmentId",
+        "type" : "int"
+      }, {
+        "name" : "filter",
+        "type" : "Filter"
+      } ],
+      "response" : "boolean"
+    },
+    "getErrors" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "customerListId",
+        "type" : "string"
+      }, {
+        "name" : "start",
+        "type" : "int"
+      }, {
+        "name" : "limit",
+        "type" : "int"
+      } ],
+      "response" : "UploadErrorsResponse"
+    },
+    "sendEmail" : {
+      "request" : [ {
+        "name" : "type",
+        "type" : "EmailType"
+      }, {
+        "name" : "toEmail",
+        "type" : "string"
+      }, {
+        "name" : "toName",
+        "type" : "string"
+      }, {
+        "name" : "args",
+        "type" : {
+          "type" : "map",
+          "values" : "string"
+        }
+      } ],
+      "response" : "EmailResponse"
+    },
+    "createSampleList" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "long"
+      } ],
+      "response" : "boolean"
+    }
+  }
+}
