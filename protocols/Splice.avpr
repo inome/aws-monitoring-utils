@@ -397,7 +397,7 @@
   }, {
     "type" : "enum",
     "name" : "EmailType",
-    "symbols" : [ "RegistrationConfirmation", "PasswordReset", "PasswordResetConfirmation", "Feedback", "Contact" ]
+    "symbols" : [ "RegistrationConfirmation", "PasswordReset", "PasswordResetConfirmation", "Feedback", "Contact", "EmailChangeNotification", "EmailChangeConfirmation" ]
   }, {
     "type" : "enum",
     "name" : "EmailStatus",
@@ -438,6 +438,10 @@
       "type" : [ "null", "string" ],
       "default" : null
     }, {
+      "name" : "fullname1",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
       "name" : "firstname2",
       "type" : [ "null", "string" ],
       "default" : null
@@ -447,6 +451,10 @@
       "default" : null
     }, {
       "name" : "lastname2",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "fullname2",
       "type" : [ "null", "string" ],
       "default" : null
     }, {
@@ -986,6 +994,10 @@
       "default" : [ ]
     }, {
       "name" : "numberAdultsInHouseholdMatchRate",
+      "type" : "float",
+      "default" : 0
+    }, {
+      "name" : "ageGenderMatchRate",
       "type" : "float",
       "default" : 0
     } ]
