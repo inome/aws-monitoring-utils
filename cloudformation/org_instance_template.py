@@ -4,7 +4,7 @@ from collections import OrderedDict
 from cloudformation.commonutils import *
 
 '''get the cloudformation template for org clusters'''
-def get_instance_template_org(instance_num, zk_quorum, s3location, coretype):
+def get_instance_template_org(instance_num, zk_quorum, s3location, coretype, collection):
     instance = OrderedDict()
 
     #Instance type
@@ -77,16 +77,16 @@ def get_instance_template_org(instance_num, zk_quorum, s3location, coretype):
     if instance_num == 1:
         fn_join_sublist.append("/opt/s3cmd/s3cmd --config /opt/s3cfg get s3://inome-solrcloud/scripts/setup_zk.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts")
         fn_join_sublist.append("\n")
-        fn_join_sublist.append("bash -x setup_zk.sh " + zk_quorum + " " + get_solr_config_name(coretype) + " " + "/mnt/shards/SHARD0/conf" + " " + coretype)
+        fn_join_sublist.append("bash -x setup_zk.sh " + zk_quorum + " " + get_solr_config_name(coretype) + " " + "/mnt/shards/SHARD0/conf" + " " + collection)
         fn_join_sublist.append("\n")
 
     #setup solr configuration files
     fn_join_sublist.append("/opt/s3cmd/s3cmd --config /opt/s3cfg get --force s3://inome-solrcloud/scripts/setup_solr.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts")
     fn_join_sublist.append("\n")
     if instance_num == 1:
-        fn_join_sublist.append("bash -x setup_solr.sh leader 0 1 SHARD0 shard1 helix-organizations core_node0")
+        fn_join_sublist.append("bash -x setup_solr.sh leader 0 1 SHARD0 shard1 " + collection + " core_node0")
     elif instance_num == 2:
-        fn_join_sublist.append("bash -x setup_solr.sh leader 0 1 SHARD0 shard1 helix-organizations core_node1")
+        fn_join_sublist.append("bash -x setup_solr.sh leader 0 1 SHARD0 shard1 " + collection + " core_node1")
     fn_join_sublist.append("\n")
 
     #finally start both leader and replica tomcat instances

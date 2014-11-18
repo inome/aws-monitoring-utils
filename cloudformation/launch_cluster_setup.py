@@ -7,7 +7,7 @@ from cloudformation.people_loc_template import *
 
 
 '''launch people cluster'''
-def launch_people_cluster(connection,zk_quorum,s3baseurl,deployment="dev",monitoring="off"):
+def launch_people_cluster(connection,zk_quorum,s3baseurl,collection,deployment="dev",monitoring="off"):
     template = dict()
 
     #template suffix
@@ -17,7 +17,7 @@ def launch_people_cluster(connection,zk_quorum,s3baseurl,deployment="dev",monito
     #instance templates
     instance_templates = OrderedDict()
     for i in range(1,7,1):
-        instance_templates["Instance" + str(i)] = get_instance_template(i,zk_quorum,s3baseurl,"helix-people")
+        instance_templates["Instance" + str(i)] = get_instance_template(i,zk_quorum,s3baseurl,"helix-people", collection)
 
     template["Resources"] = instance_templates
 
@@ -33,7 +33,7 @@ def launch_people_cluster(connection,zk_quorum,s3baseurl,deployment="dev",monito
     connection.create_stack(stack_name="helix-people",template_body=template_body,tags=tag)
 
 '''launch locations cluster'''
-def launch_locations_cluster(connection,zk_quorum,s3baseurl,deployment="dev",monitoring="off"):
+def launch_locations_cluster(connection,zk_quorum,s3baseurl, collection, deployment="dev",monitoring="off"):
     template = dict()
 
     #template suffix
@@ -43,7 +43,7 @@ def launch_locations_cluster(connection,zk_quorum,s3baseurl,deployment="dev",mon
     #instance templates
     instance_templates = OrderedDict()
     for i in range(1,7,1):
-        instance_templates["Instance" + str(i)] = get_instance_template(i,zk_quorum,s3baseurl,"helix-locations")
+        instance_templates["Instance" + str(i)] = get_instance_template(i,zk_quorum,s3baseurl,"helix-locations", collection)
 
     template["Resources"] = instance_templates
 
@@ -59,7 +59,7 @@ def launch_locations_cluster(connection,zk_quorum,s3baseurl,deployment="dev",mon
     connection.create_stack(stack_name="helix-locations",template_body=template_body,tags=tag)
 
 '''launch organization cluster'''
-def launch_org_cluster(connection,zk_quorum,s3baseurl,deployment="dev",monitoring="off"):
+def launch_org_cluster(connection,zk_quorum,s3baseurl,collection,deployment="dev",monitoring="off"):
     template = dict()
 
     #template suffix
@@ -69,7 +69,7 @@ def launch_org_cluster(connection,zk_quorum,s3baseurl,deployment="dev",monitorin
     #instance templates
     instance_templates = OrderedDict()
     for i in range(1,3,1):
-        instance_templates["Instance" + str(i)] = get_instance_template_org(i,zk_quorum,s3baseurl,"helix-organizations")
+        instance_templates["Instance" + str(i)] = get_instance_template_org(i,zk_quorum,s3baseurl,"helix-organizations",collection)
 
     template["Resources"] = instance_templates
 

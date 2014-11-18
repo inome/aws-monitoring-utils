@@ -1,5 +1,6 @@
 import requests
 from utils.locallogging import debug
+from boto.pyami.config import *
 
 CONNECTION_KEYS = ["/helix-aws/aws_access_key", "/helix-aws/aws_secret_access_key", "/helix-aws/librato_api_key",
                       "/helix-aws/librato_username", "/helix-aws/pingdom_api_key", "/helix-aws/pingdom_password",
@@ -31,3 +32,18 @@ def getAccessPropertiesFromConfigService(env="DEV", api_key="", strip_helix_pref
             else:
                 returnmap[key] = value
     return returnmap
+
+# NOTE: This requires that you have a file called .boto in your home directory
+# with the access key and secret key defined
+def getAccessPropertiesFromBotoConfig():
+    returnmap = {}
+    config = Config()
+
+    access_key_id = config.get_value(section="Credentials", name="aws_access_key_id")
+    secret_access_key = config.get_value(section="Credentials", name="aws_secret_access_key")
+
+    returnmap["aws_access_key"] = access_key_id
+    returnmap["aws_secret_access_key"] = secret_access_key
+
+    return returnmap
+

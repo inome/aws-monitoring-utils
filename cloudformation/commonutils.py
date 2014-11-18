@@ -78,20 +78,20 @@ def get_shard_location(s3location,coretype,instance,shardtype):
 
 
 '''Return the proper invocation script given coretype, instance num, and shard type '''
-def get_solr_setup_invocation(coretype,instance_num,shardtype):
+def get_solr_setup_invocation(coretype,instance_num,shardtype,collection):
     if coretype == 'helix-people' or coretype == 'helix-locations':
         if shardtype == 'leader':
             actual_shard_num = get_shard_num(coretype,instance_num,"leader")
             shard_num = int(get_shard_num(coretype,instance_num,"leader")) + 1
             core_node = shard_num
             num_shards = 6
-            return "bash -x setup_solr.sh leader" + " " + actual_shard_num + " " + str(num_shards) + " " + "SHARD" + actual_shard_num + " " + "shard" + str(shard_num) + " " + coretype + " " + "core_node" + str(core_node)
+            return "bash -x setup_solr.sh leader" + " " + actual_shard_num + " " + str(num_shards) + " " + "SHARD" + actual_shard_num + " " + "shard" + str(shard_num) + " " + collection + " " + "core_node" + str(core_node)
         elif shardtype == 'replica':
             actual_shard_num = get_shard_num(coretype,instance_num,"replica")
             shard_num = int(get_shard_num(coretype,instance_num,"replica")) + 1
             core_node = 6 + shard_num
             num_shards = 6
-            return "bash -x setup_solr.sh replica" + " " + actual_shard_num + " " + str(num_shards) + " " + "SHARD" + actual_shard_num + " " + "shard" + str(shard_num) + " " + coretype + " " + "core_node" + str(core_node)
+            return "bash -x setup_solr.sh replica" + " " + actual_shard_num + " " + str(num_shards) + " " + "SHARD" + actual_shard_num + " " + "shard" + str(shard_num) + " " + collection + " " + "core_node" + str(core_node)
     elif coretype == 'helix-organizations':
         return "bash -x setup_solr.sh leader 0 1 SHARD0 shard1 helix-organizations core_node0"
 

@@ -4,7 +4,7 @@ from cloudformation.commonutils import *
 from collections import *
 
 '''get the cloudformation template for people / location cluster setups. They are both identical'''
-def get_instance_template(instance_num, zk_quorum, s3location, coretype):
+def get_instance_template(instance_num, zk_quorum, s3location, coretype, collection):
     instance = OrderedDict()
 
     #Instance type
@@ -89,13 +89,13 @@ def get_instance_template(instance_num, zk_quorum, s3location, coretype):
     if instance_num == 1:
         fn_join_sublist.append("/opt/s3cmd/s3cmd --config /opt/s3cfg get s3://inome-solrcloud/scripts/setup_zk.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts")
         fn_join_sublist.append("\n")
-        fn_join_sublist.append("bash -x setup_zk.sh " + zk_quorum + " " + get_solr_config_name(coretype) + " " + "/mnt/shards/SHARD0/conf" + " " + coretype)
+        fn_join_sublist.append("bash -x setup_zk.sh " + zk_quorum + " " + get_solr_config_name(coretype) + " " + "/mnt/shards/SHARD0/conf" + " " + collection)
         fn_join_sublist.append("\n")
 
     #setup solr configuration files
     fn_join_sublist.append("/opt/s3cmd/s3cmd --config /opt/s3cfg get --force s3://inome-solrcloud/scripts/setup_solr.sh /opt/solrcloud/scripts/; cd /opt/solrcloud/scripts")
     fn_join_sublist.append("\n")
-    fn_join_sublist.append(get_solr_setup_invocation(coretype,instance_num,"leader") + " && " + get_solr_setup_invocation(coretype,instance_num,"replica"))
+    fn_join_sublist.append(get_solr_setup_invocation(coretype,instance_num,"leader", collection) + " && " + get_solr_setup_invocation(coretype,instance_num,"replica", collection))
     fn_join_sublist.append("\n")
 
     #finally start both leader and replica tomcat instances
