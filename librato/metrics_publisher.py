@@ -23,7 +23,7 @@ class MetricsPublisher (object):
     METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME = "solrcloud-replica-avg-request-time"
     METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE = "solrcloud-replica-5min-request-rate"
 
-    CPU_INTERVAL = 30.0
+    CPU_INTERVAL = 10.0
 
     instance_name = None
     measure_time = int(dt.datetime.now().replace(second=0, microsecond=0).strftime("%s"))
