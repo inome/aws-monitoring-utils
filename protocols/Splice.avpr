@@ -396,6 +396,10 @@
     "symbols" : [ "Children", "NoChildren", "Unknown", "All" ]
   }, {
     "type" : "enum",
+    "name" : "OccupationType",
+    "symbols" : [ "BlueCollar", "FarmRelated", "Other", "Professional_Technical", "Retired", "Sales_Service", "Unknown", "All" ]
+  }, {
+    "type" : "enum",
     "name" : "EmailType",
     "symbols" : [ "RegistrationConfirmation", "PasswordReset", "PasswordResetConfirmation", "Feedback", "Contact", "EmailChangeNotification", "EmailChangeConfirmation" ]
   }, {
@@ -518,6 +522,22 @@
       "type" : [ "null", "string" ],
       "default" : null
     }, {
+      "name" : "ipv4",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "derivedcity",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "derivedstate",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "derivedzip",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
       "name" : "customerdata1",
       "type" : [ "null", "string" ],
       "default" : null
@@ -596,6 +616,10 @@
     }, {
       "name" : "numberAdultsInHousehold",
       "type" : [ "NumberRangeType", "null" ],
+      "default" : "Unknown"
+    }, {
+      "name" : "occupation",
+      "type" : [ "OccupationType", "null" ],
       "default" : "Unknown"
     } ]
   }, {
@@ -732,6 +756,22 @@
     "fields" : [ {
       "name" : "numberAdultsInHousehold",
       "type" : "NumberRangeType",
+      "default" : "Unknown"
+    }, {
+      "name" : "Count",
+      "type" : "int",
+      "default" : 0
+    }, {
+      "name" : "Percent",
+      "type" : "float",
+      "default" : 0
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "OccupationStats",
+    "fields" : [ {
+      "name" : "occupation",
+      "type" : "OccupationType",
       "default" : "Unknown"
     }, {
       "name" : "Count",
@@ -1000,6 +1040,17 @@
       "name" : "ageGenderMatchRate",
       "type" : "float",
       "default" : 0
+    }, {
+      "name" : "occupationStats",
+      "type" : {
+        "type" : "array",
+        "items" : "OccupationStats"
+      },
+      "default" : [ ]
+    }, {
+      "name" : "occupationMatchRate",
+      "type" : "float",
+      "default" : 0
     } ]
   }, {
     "type" : "record",
@@ -1137,6 +1188,123 @@
         "items" : "NumberRangeType"
       } ],
       "default" : null
+    }, {
+      "name" : "occupation",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "OccupationType"
+      } ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "CustomerListFilter",
+    "fields" : [ {
+      "name" : "id",
+      "type" : [ "null", "int" ],
+      "default" : null
+    }, {
+      "name" : "listId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "filter",
+      "type" : [ "null", "Filter" ],
+      "default" : null
+    }, {
+      "name" : "dateCreated",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "CustomerList",
+    "fields" : [ {
+      "name" : "id",
+      "type" : [ "null", "int" ],
+      "default" : null
+    }, {
+      "name" : "customerId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "dateCreated",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "importType",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "originalId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "publicList",
+      "type" : [ "null", "boolean" ],
+      "default" : null
+    }, {
+      "name" : "spliceListDetail",
+      "type" : [ "null", "ListDetail" ],
+      "default" : null
+    }, {
+      "name" : "listFilters",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "CustomerListFilter"
+      } ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "RawCustomerList",
+    "fields" : [ {
+      "name" : "id",
+      "type" : [ "null", "int" ],
+      "default" : null
+    }, {
+      "name" : "customerId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "dateCreated",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "importType",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "originalId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "spliceListDetail",
+      "type" : [ "null", "ListDetail" ],
+      "default" : null
+    }, {
+      "name" : "listFilters",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "CustomerListFilter"
+      } ],
+      "default" : null
+    }, {
+      "name" : "rawData",
+      "type" : [ "null", "string" ],
+      "default" : null
     } ]
   }, {
     "type" : "record",
@@ -1214,9 +1382,33 @@
       "default" : null
     } ]
   }, {
+    "type" : "record",
+    "name" : "SpliceUser",
+    "fields" : [ {
+      "name" : "customerId",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "email",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "firstName",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "lastName",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "fullName",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
     "type" : "enum",
     "name" : "ExternalMailer",
-    "symbols" : [ "MAILCHIMP" ]
+    "symbols" : [ "MAILCHIMP", "AWEBER", "CONSTANT_CONTACT" ]
   }, {
     "type" : "enum",
     "name" : "SegmentType",
@@ -1229,24 +1421,31 @@
       "type" : [ "null", "string" ],
       "default" : null
     }, {
-      "name" : "fieldType",
+      "name" : "externalId",
       "type" : [ "null", "string" ],
       "default" : null
     }, {
-      "name" : "tag",
+      "name" : "fieldType",
       "type" : [ "null", "string" ],
       "default" : null
     }, {
       "name" : "spliceEquivalent",
       "type" : [ "null", "string" ],
       "default" : null
+    }, {
+      "name" : "examples",
+      "type" : [ "null", {
+        "type" : "array",
+        "items" : "string"
+      } ],
+      "default" : null
     } ]
   }, {
     "type" : "record",
     "name" : "SegmentInfo",
     "fields" : [ {
-      "name" : "id",
-      "type" : [ "null", "int" ],
+      "name" : "externalId",
+      "type" : [ "null", "string" ],
       "default" : null
     }, {
       "name" : "name",
@@ -1283,6 +1482,42 @@
     }, {
       "name" : "createdDate",
       "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "record",
+    "name" : "AccountInfo",
+    "fields" : [ {
+      "name" : "name",
+      "type" : [ "null", "string" ],
+      "default" : null
+    }, {
+      "name" : "id",
+      "type" : [ "null", "string" ],
+      "default" : null
+    } ]
+  }, {
+    "type" : "enum",
+    "name" : "AutoResponderListType",
+    "symbols" : [ "WELCOME_LIST", "UPLOAD_LIST" ]
+  }, {
+    "type" : "enum",
+    "name" : "Event",
+    "symbols" : [ "ACCEPT_TERMS_AND_CONDITIONS", "ACCOUNT_UPDATE", "ACCOUNT_UPDATE_EMAIL", "BOGUS_FORGOT_PASSWORD", "BOGUS_RESET_PASSWORD", "CHANGE_PASSWORD", "CHANGE_PASSWORD_EMAIL", "CUSTOMER_GET", "CUSTOMERS_GET", "CONTACT_EMAIL", "DEMOGRAPHIC_SEGMENTS_GET", "DOWNLOAD_ERRORS", "DOWNLOAD_FILTERED_LIST", "DOWNLOAD_MAILCHIMP_LIST", "EMAIL_VERIFIED", "ERROR", "ERROR_SUMMARY", "FEEDBACK_EMAIL", "FILTER_CREATE", "FILTER_DELETE", "FILTER_GET", "FILTERS_GET", "FILTER_UPDATE", "FILTERS_DELETE_ALL", "LIST_DELETE", "LIST_DOWNLOAD", "LIST_GET", "LISTS_GET_ALL", "LIST_GET_STATS", "LIST_UPLOAD", "LOG_IN", "LOG_IN_FAILURE", "LOG_OUT", "MAP_POPULATION", "MAP_FILTER", "PASSWORD_RESET", "PASSWORD_RESET_CONFIRMATION_EMAIL", "REGISTER", "REGISTRATION_CONFIRMATION_EMAIL", "RESET_PASSWORD_EMAIL", "UPLOAD_FIELDS" ]
+  }, {
+    "type" : "enum",
+    "name" : "Page",
+    "symbols" : [ "ACCOUNT", "ADMIN", "CHANGE_PASSWORD", "INSIGHTS", "CONTACT", "FEEDBACK", "FORGOT_PASSWORD", "IMPORT_MAILCHIMP", "LOG_IN", "REGISTER", "RESET_PASSWORD", "TERMS_AND_CONDITIONS", "UPLOAD", "UPLOAD_CSV", "UPLOAD_EXCEL", "UPLOAD_MAILCHIMP", "UPLOAD_AWEBER", "FIELD_SELECTOR", "VERIFY_EMAIL", "YOURLISTS", "HOME" ]
+  }, {
+    "type" : "record",
+    "name" : "Activity",
+    "fields" : [ {
+      "name" : "event",
+      "type" : [ "null", "Event" ],
+      "default" : null
+    }, {
+      "name" : "page",
+      "type" : [ "null", "Page" ],
       "default" : null
     } ]
   } ],
@@ -1352,10 +1587,13 @@
         "name" : "customerId",
         "type" : "string"
       }, {
-        "name" : "listId",
+        "name" : "customerListId",
         "type" : "string"
       }, {
-        "name" : "rawFileContents",
+        "name" : "customerListName",
+        "type" : "string"
+      }, {
+        "name" : "rawCsvString",
         "type" : "string"
       }, {
         "name" : "runRecordProcessor",
@@ -1410,12 +1648,28 @@
         "values" : "long"
       }
     },
+    "getExternalAccounts" : {
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "customerId",
+        "type" : "string"
+      } ],
+      "response" : {
+        "type" : "array",
+        "items" : "AccountInfo"
+      }
+    },
     "getExternalLists" : {
       "request" : [ {
         "name" : "externalMailer",
         "type" : "ExternalMailer"
       }, {
-        "name" : "apiKey",
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "account",
         "type" : "string"
       } ],
       "response" : {
@@ -1428,7 +1682,7 @@
         "name" : "externalMailer",
         "type" : "ExternalMailer"
       }, {
-        "name" : "apiKey",
+        "name" : "customerId",
         "type" : "string"
       }, {
         "name" : "externalListId",
@@ -1444,7 +1698,7 @@
         "name" : "externalMailer",
         "type" : "ExternalMailer"
       }, {
-        "name" : "apiKey",
+        "name" : "customerId",
         "type" : "string"
       }, {
         "name" : "externalListId",
@@ -1463,7 +1717,7 @@
         "name" : "externalMailer",
         "type" : "ExternalMailer"
       }, {
-        "name" : "apiKey",
+        "name" : "customerId",
         "type" : "string"
       }, {
         "name" : "externalListId",
@@ -1476,7 +1730,7 @@
         "name" : "externalMailer",
         "type" : "ExternalMailer"
       }, {
-        "name" : "apiKey",
+        "name" : "customerId",
         "type" : "string"
       }, {
         "name" : "externalListId",
@@ -1492,7 +1746,7 @@
         "name" : "externalMailer",
         "type" : "ExternalMailer"
       }, {
-        "name" : "apiKey",
+        "name" : "customerId",
         "type" : "string"
       }, {
         "name" : "listId",
@@ -1507,9 +1761,6 @@
       "request" : [ {
         "name" : "externalMailer",
         "type" : "ExternalMailer"
-      }, {
-        "name" : "apiKey",
-        "type" : "string"
       }, {
         "name" : "customerId",
         "type" : "string"
@@ -1536,9 +1787,6 @@
         "name" : "customerListId",
         "type" : "string"
       }, {
-        "name" : "apiKey",
-        "type" : "string"
-      }, {
         "name" : "externalListId",
         "type" : "string"
       }, {
@@ -1561,14 +1809,11 @@
         "name" : "customerListId",
         "type" : "string"
       }, {
-        "name" : "apiKey",
-        "type" : "string"
-      }, {
         "name" : "externalListId",
         "type" : "string"
       }, {
         "name" : "externalSegmentId",
-        "type" : "int"
+        "type" : "string"
       }, {
         "name" : "filter",
         "type" : "Filter"
@@ -1591,6 +1836,75 @@
       } ],
       "response" : "UploadErrorsResponse"
     },
+    "getAuthenticationUrl" : {
+      "doc" : "* Get Authentication URL for given externalMailer type",
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      } ],
+      "response" : "string"
+    },
+    "externalAutheticate" : {
+      "doc" : "* Authenticate external services (MailChimp, Aweber or Constant Contact)\n    *\n    * Aweber: requires customerId, requestToken, verifier code\n    * MailChimp: requires customerId, requestToken",
+      "request" : [ {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "requestToken",
+        "type" : "string"
+      }, {
+        "name" : "verifier",
+        "type" : "string"
+      } ],
+      "response" : "boolean"
+    },
+    "hasCredentials" : {
+      "doc" : "* Verify if credentials exist for given customerId",
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      } ],
+      "response" : "boolean"
+    },
+    "hasAuthority" : {
+      "doc" : "* Verify if the connected external user has authority to do everything we want for given customerId",
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      } ],
+      "response" : "boolean"
+    },
+    "refreshAccountCredentials" : {
+      "doc" : "* Check for updates (if relevant) to this external account. Update db if changes detected",
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      } ],
+      "response" : "boolean"
+    },
+    "removeExternalCredentials" : {
+      "doc" : "* Remove stored credentials for an external mailer",
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "string"
+      }, {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      } ],
+      "response" : "boolean"
+    },
     "sendEmail" : {
       "request" : [ {
         "name" : "type",
@@ -1610,10 +1924,68 @@
       } ],
       "response" : "EmailResponse"
     },
-    "createSampleList" : {
+    "insertRawList" : {
       "request" : [ {
         "name" : "customerId",
-        "type" : "long"
+        "type" : "int"
+      }, {
+        "name" : "listName",
+        "type" : "string"
+      }, {
+        "name" : "fileContents",
+        "type" : "string"
+      }, {
+        "name" : "importType",
+        "type" : "string"
+      } ],
+      "response" : "boolean"
+    },
+    "getRawList" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "int"
+      }, {
+        "name" : "listName",
+        "type" : "string"
+      } ],
+      "response" : "RawCustomerList"
+    },
+    "deleteRawList" : {
+      "request" : [ {
+        "name" : "customerId",
+        "type" : "int"
+      }, {
+        "name" : "listName",
+        "type" : "string"
+      } ],
+      "response" : "boolean"
+    },
+    "addToAutoResponder" : {
+      "request" : [ {
+        "name" : "customer",
+        "type" : "SpliceUser"
+      }, {
+        "name" : "externalMailer",
+        "type" : "ExternalMailer"
+      }, {
+        "name" : "type",
+        "type" : "AutoResponderListType"
+      } ],
+      "response" : "boolean"
+    },
+    "logActivity" : {
+      "request" : [ {
+        "name" : "customer",
+        "type" : "SpliceUser"
+      }, {
+        "name" : "activity",
+        "type" : "Activity"
+      }, {
+        "name" : "ip",
+        "type" : "string"
+      }, {
+        "name" : "notes",
+        "type" : "string"
       } ],
       "response" : "boolean"
     }
