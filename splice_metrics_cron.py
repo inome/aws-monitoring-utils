@@ -93,9 +93,9 @@ if __name__ == '__main__':
                                        (customer["id"], customer["name"], customer["email"], customerlist["listid"], customerlist["listname"], customerlist["listdatecreated"], listdetails["numRecords"])
                 except UnicodeDecodeError as e:
                     continue
-            if "new" in customer:
-                new_customers_table += "%s\t%s\t%s\t%s\t%s\t%s\n" % (customer["id"], customer["name"], customer["email"], customer["createdate"], customer["termsaccepteddate"], customer["emailverified"])
-                new_customers_table_html += "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (customer["id"], customer["name"], customer["email"], customer["createdate"], customer["termsaccepteddate"], customer["emailverified"])
+        if "new" in customer:
+            new_customers_table += "%s\t%s\t%s\t%s\t%s\t%s\n" % (customer["id"], customer["name"], customer["email"], customer["createdate"], customer["termsaccepteddate"], customer["emailverified"])
+            new_customers_table_html += "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (customer["id"], customer["name"], customer["email"], customer["createdate"], customer["termsaccepteddate"], customer["emailverified"])
 
     new_customers_table_html += "</table>"
     new_lists_table_html += "</table>"
