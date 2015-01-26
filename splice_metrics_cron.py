@@ -1,6 +1,7 @@
 import json
 import os.path
 import requests
+import time
 
 import MySQLdb
 
@@ -27,8 +28,10 @@ if __name__ == '__main__':
 
     users_and_lists = {}
 
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
+
     cur = db.cursor()
-    cur.execute("SELECT id, name, primaryEmail AS email, createdate AS create_date, termsacceptancedate AS terms_date, emailverified AS verified FROM InomeSpliceUI.Customers WHERE createdate > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND createdate <= NOW() ORDER BY createdate DESC")
+    cur.execute("SELECT id, name, primaryEmail AS email, createdate AS create_date, termsacceptancedate AS terms_date, emailverified AS verified FROM InomeSpliceUI.Customers WHERE createdate > DATE_SUB('%s', INTERVAL 24 HOUR) AND createdate <= '%s' ORDER BY createdate DESC" % (now, now))
     for row in cur.fetchall():
         createdate = row[3]
         if createdate is not None:
@@ -38,7 +41,7 @@ if __name__ == '__main__':
            termsdate = termsdate.strftime("%Y-%m-%d %H:%M")
         users_and_lists[str(row[0])] = {"new": True, "id": str(row[0]), "name": row[1], "email": row[2], "createdate": createdate, "termsaccepteddate": termsdate, "emailverified": row[5]}
 
-    cur.execute("SELECT C.id AS customerid, C.name, C.primaryEmail, L.id AS listid, L.name, L.datecreated AS listcreatedate FROM InomeSpliceUI.Lists L INNER JOIN InomeSpliceUI.Customers C ON L.customerid = C.id WHERE L.datecreated > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND L.datecreated <= NOW()")
+    cur.execute("SELECT C.id AS customerid, C.name, C.primaryEmail, L.id AS listid, L.name, L.datecreated AS listcreatedate FROM InomeSpliceUI.Lists L INNER JOIN InomeSpliceUI.Customers C ON L.customerid = C.id WHERE L.datecreated > DATE_SUB('%s', INTERVAL 24 HOUR) AND L.datecreated <= '%s'" % (now, now))
     for row in cur.fetchall():
         customerid = str(row[0])
         listid = str(row[3])
