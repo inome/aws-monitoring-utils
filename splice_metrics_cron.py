@@ -77,7 +77,7 @@ if __name__ == '__main__':
         params['customerId'] = "%s" % customeridint
         if "lists" in customer:
             for customerlistid, customerlist in customer["lists"].iteritems():
-                params['customerListId'] = "%s" % customerlist["listname"]
+                params['customerListId'] = "%s" % customerlist["listid"]
                 try:
                     debug(requester)
 
