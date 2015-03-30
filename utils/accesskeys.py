@@ -1,4 +1,4 @@
-import requests
+import MySQLdb
 from utils.locallogging import debug
 from boto.pyami.config import *
 
@@ -7,20 +7,15 @@ CONNECTION_KEYS = ["/helix-aws/aws_access_key", "/helix-aws/aws_secret_access_ke
                       "/helix-aws/pingdom_username", "/helix-aws/aws_regions"]
 
 def get_key_from_configservice(env="DEV", api_key="", key="", default_value=None):
-    url = "http://config.vs.intelius.com:8080/configuration/1.0/get?env=%s&key=%s" % (env, key)
-    if len(api_key) > 0:
-        url += "&callerid=%s" % api_key
-    debug(url)
-    try:
-        data = requests.get(url)
-        datajson = data.json()
-        if data.status_code == 200 and "value" in datajson:
-            return datajson["value"]
-        elif "value" not in datajson:
-            return default_value
-    except Exception as e:
-        print("UNABLE TO RETRIEVE DATA FROM THE CONFIGURATION SERVICE")
-        print(e)
+    db_host = 'insights-ui.cwvv3djozy6b.us-west-2.rds.amazonaws.com'
+    db_user = 'readonly'
+    db_pass = 'Eq9kkDRHvnMZ'
+    db = MySQLdb.connect(host=db_host, user=db_user, passwd=db_pass)
+    cur = db.cursor()
+    cur.execute("SELECT Value FROM Inome.Configuration WHERE Env = '%s' AND `Key` = '%s'" % (env, key))
+    for row in cur.fetchall():
+        return row[0]
+    return default_value
 
 def getAccessPropertiesFromConfigService(env="DEV", api_key="", strip_helix_prefix=True):
     returnmap = {}
