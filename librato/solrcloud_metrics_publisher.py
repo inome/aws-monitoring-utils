@@ -25,12 +25,18 @@ class SOLRCloudMetricsPublisher(MetricsPublisher):
             stats = requests.get(solr_stats_url).json()
             #requests_per_second = stats["solr-mbeans"][1]["/select"]["stats"]["avgRequestsPerSecond"]
             avg_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["avgTimePerRequest"]
+            median_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["medianRequestTime"]
+            pct95_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["95thPcRequestTime"]
             min5_req_rate_per_second = stats["solr-mbeans"][1]["/select"]["stats"]["5minRateReqsPerSecond"]
             if not replicas:
                 metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
+                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_MEDIAN_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, median_time_per_request, MetricsPublisher.GAUGE)
+                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_95PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct95_time_per_request, MetricsPublisher.GAUGE)
                 metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
             else:
                 metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
+                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_MEDIAN_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, median_time_per_request, MetricsPublisher.GAUGE)
+                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_95PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct95_time_per_request, MetricsPublisher.GAUGE)
                 metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
 
     '''
