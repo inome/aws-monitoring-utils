@@ -21,10 +21,12 @@ class MetricsPublisher (object):
     METRICS_SOLRCLOUD_LEADER_AVG_REQUEST_TIME = "solrcloud-leader-avg-request-time"
     METRICS_SOLRCLOUD_LEADER_MEDIAN_REQUEST_TIME = "solrcloud-leader-median-request-time"
     METRICS_SOLRCLOUD_LEADER_95PCT_REQUEST_TIME = "solrcloud-leader-95pct-request-time"
+    METRICS_SOLRCLOUD_LEADER_75PCT_REQUEST_TIME = "solrcloud-leader-75pct-request-time"
     METRICS_SOLRCLOUD_LEADER_5MIN_REQ_RATE = "solrcloud-leader-5min-request-rate"
     METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME = "solrcloud-replica-avg-request-time"
     METRICS_SOLRCLOUD_REPLICA_MEDIAN_REQUEST_TIME = "solrcloud-replica-median-request-time"
     METRICS_SOLRCLOUD_REPLICA_95PCT_REQUEST_TIME = "solrcloud-replica-95pct-request-time"
+    METRICS_SOLRCLOUD_REPLICA_75PCT_REQUEST_TIME = "solrcloud-replica-75pct-request-time"
     METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE = "solrcloud-replica-5min-request-rate"
 
     CPU_INTERVAL = 10.0
