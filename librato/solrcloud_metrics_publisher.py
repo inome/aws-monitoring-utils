@@ -5,42 +5,49 @@ from utils.ec2instancedetails import getLocalHostname
 from utils.locallogging import debug
 
 class SOLRCloudMetricsPublisher(MetricsPublisher):
-    def get_metrics(self, metrics_to_publish={}):
-        metrics_to_publish = MetricsPublisher.get_metrics(self, metrics_to_publish)
-        # localhostname="ip-172-31-47-211.us-west-2.compute.internal"
-        localhostname = getLocalHostname(True)
 
+    def publish_metrics(self, accessProperties=None, verifyonly=False):
+        metrics = MetricsPublisher.get_metrics(self)
+        source_name = self.instance_name
+        self.post_metrics(source_name, metrics, accessProperties, verifyonly)
+
+        localhostname = getLocalHostname(True)
         clusterstate = self.getClusterStateForHost(localhostname)
         debug(clusterstate)
 
-        self.populateMetrics(localhostname=localhostname, metrics=metrics_to_publish, hosts=clusterstate["leaders"])
-        self.populateMetrics(localhostname=localhostname, metrics=metrics_to_publish, replicas=True, hosts=clusterstate["replicas"])
-
-        return metrics_to_publish
-
-    def populateMetrics(self, localhostname, metrics={}, replicas=False, hosts=None):
+        hosts = clusterstate["leaders"]
         for host in hosts:
-            solr_stats_url = host["base_url"].replace(localhostname, "localhost") + "/" + host["core"] + "/admin/mbeans?cat=QUERYHANDLER&key=/select&stats=true&wt=json"
-            debug(solr_stats_url)
-            stats = requests.get(solr_stats_url).json()
-            #requests_per_second = stats["solr-mbeans"][1]["/select"]["stats"]["avgRequestsPerSecond"]
-            avg_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["avgTimePerRequest"]
-            median_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["medianRequestTime"]
-            pct95_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["95thPcRequestTime"]
-            pct75_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["75thPcRequestTime"]
-            min5_req_rate_per_second = stats["solr-mbeans"][1]["/select"]["stats"]["5minRateReqsPerSecond"]
-            if not replicas:
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_MEDIAN_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, median_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_95PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct95_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_75PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct75_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
-            else:
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_MEDIAN_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, median_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_95PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct95_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_75PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct75_time_per_request, MetricsPublisher.GAUGE)
-                metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
+            metrics_to_publish = self.populateMetrics(localhostname, host)
+            self.post_metrics(self.instance_name + "." + host["core"], metrics_to_publish, accessProperties, verifyonly)
+        hosts = clusterstate["replicas"]
+        for host in hosts:
+            metrics_to_publish = self.populateMetrics(localhostname, host, True)
+            self.post_metrics(self.instance_name + "." + host["core"], metrics_to_publish, accessProperties, verifyonly)
+
+    def populateMetrics(self, localhostname, host, replica=False):
+        solr_stats_url = host["base_url"].replace(localhostname, "localhost") + "/" + host["core"] + "/admin/mbeans?cat=QUERYHANDLER&key=/select&stats=true&wt=json"
+        debug(solr_stats_url)
+        stats = requests.get(solr_stats_url).json()
+        #requests_per_second = stats["solr-mbeans"][1]["/select"]["stats"]["avgRequestsPerSecond"]
+        avg_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["avgTimePerRequest"]
+        median_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["medianRequestTime"]
+        pct95_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["95thPcRequestTime"]
+        pct75_time_per_request = stats["solr-mbeans"][1]["/select"]["stats"]["75thPcRequestTime"]
+        min5_req_rate_per_second = stats["solr-mbeans"][1]["/select"]["stats"]["5minRateReqsPerSecond"]
+        metrics = {}
+        if not replica:
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_MEDIAN_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, median_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_95PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct95_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_75PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct75_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_LEADER_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
+        else:
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_AVG_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, avg_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_MEDIAN_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, median_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_95PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct95_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_75PCT_REQUEST_TIME] = MetricsPublisher.wrap_value_type(self, pct75_time_per_request, MetricsPublisher.GAUGE)
+            metrics[MetricsPublisher.METRICS_SOLRCLOUD_REPLICA_5MIN_REQ_RATE] = MetricsPublisher.wrap_value_type(self, min5_req_rate_per_second, MetricsPublisher.GAUGE)
+        return metrics
 
     '''
     Reads in from the localhost zookeeper clusterstate.json file to understand what roles this particular instance

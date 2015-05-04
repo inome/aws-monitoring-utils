@@ -45,14 +45,16 @@ class MetricsPublisher (object):
         return metrics_to_publish
 
     def publish_metrics(self, accessProperties=None, verifyonly=False):
+        metrics = self.get_metrics()
+        self.post_metrics(self.instance_name, self.measure_time, metrics, accessProperties, verifyonly)
+
+    def post_metrics(self, metrics_source, metrics, accessProperties, verifyonly):
         if accessProperties is None or "librato_username" not in accessProperties or "librato_api_key" not in accessProperties:
             print "ERROR - unable to publish metrics without proper authentication credentials"
             return False
 
-        metrics = self.get_metrics()
-
         request = {
-            "source": self.instance_name,
+            "source": metrics_source,
             "measure_time": self.measure_time,
             "counters": [],
             "gauges": []
