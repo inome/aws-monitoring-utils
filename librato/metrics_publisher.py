@@ -46,7 +46,7 @@ class MetricsPublisher (object):
 
     def publish_metrics(self, accessProperties=None, verifyonly=False):
         metrics = self.get_metrics()
-        self.post_metrics(self.instance_name, self.measure_time, metrics, accessProperties, verifyonly)
+        self.post_metrics(self.instance_name, metrics, accessProperties, verifyonly)
 
     def post_metrics(self, metrics_source, metrics, accessProperties, verifyonly):
         if accessProperties is None or "librato_username" not in accessProperties or "librato_api_key" not in accessProperties:
